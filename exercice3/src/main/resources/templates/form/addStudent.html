@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <span th:replace="~{home :: bootstrapImports}"></span>
+</head>
+<body>
+
+<header>
+    <span th:replace="~{home :: navbar}"></span>
+</header>
+<main>
+    <div class="container-fluid">
+        <h2 class="text-center m-2">Register Student</h2>
+        <div class="d-flex justify-content-center">
+            <form th:action="@{/add}" th:object="${student}" method="post" class="col-6">
+                <input type="hidden" th:field="*{id}">
+                <div class="mb-2">
+                    <label class="form-label" for="lastname"> Lastname :</label>
+                    <input class="form-control" type="text" id="lastname" th:field="*{lastname}" >
+                    <span th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}" class="verif"></span>
+                </div>
+                <div class="mb-2">
+                    <label class="form-label" for="firstname"> Firstname :</label>
+                    <input class="form-control" type="text" id="firstname" th:field="*{firstname}" >
+                    <span th:if="${#fields.hasErrors('firstname')}" th:errors="*{firstname}" class="verif"></span>
+                </div>
+                <div class="mb-2">
+                    <label class="form-label" for="age"> Age :</label>
+                    <input class="form-control" type="text" id="age" th:field="*{age}" >
+                    <span th:if="${#fields.hasErrors('age')}" th:errors="*{age}" class="verif"></span>
+                </div>
+                <div class="mb-2">
+                    <label class="form-label" for="email"> Email :</label>
+                    <input class="form-control" type="email" id="email" th:field="*{email}" >
+                    <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="verif"></span>
+                </div>
+                <div class="mt-3 d-flex justify-content-end">
+                    <a class="btn btn-outline-danger" th:href="@{/}">Cancel</a>
+                    <button class="btn btn-outline-primary ms-3">
+                        <span th:text="${student.id != null ? 'Update' : 'Submit'}" />
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+<span th:replace="~{home :: footer}"></span>
+
+</body>
+</html>
