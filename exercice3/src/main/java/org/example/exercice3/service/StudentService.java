@@ -70,7 +70,7 @@ public class StudentService {
        // return students.values().stream().filter(s -> s.getName().equals(name)).findFirst().orElse(null);
     //}
 
-    public List<Student> getStudentByLastnameAndFirstname() {
+    public List<Student> getStudentByLastnameAndFirstname(String lastname,String firstname) {
         return students.values().stream()
                 .filter(student -> student.getLastname().equalsIgnoreCase(lastname) && student.getFirstname().equals(firstname))
                 .toList();
@@ -82,10 +82,35 @@ public class StudentService {
                 .toList();
     }
 
-    public void updateStudent(UUID id, String lastname, String firstname, int age, String email) {
+    public Boolean updateStudent(UUID id, String lastname, String firstname, Integer age, String email) {
+        if(getStudentById(id) != null){
+            Student studentUpdate = Student.builder()
+                    .id(id)
+                    .lastname(lastname)
+                    .firstname(firstname)
+                    .email(email)
+                    .age(age)
+                    .build();
+            students.replace(id, getStudentById(id), studentUpdate);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public Boolean deleteStudent(UUID id) {
+        if (getStudentById(id) != null){
+            students.remove(id);
+            return true;
+        } else {
+            return false;
+        }
     }
 
 
-    // public void updateStudent(UUID id, String lastname, String firstname, int age, String email) {
-   // }
+    public Object searchStudents(String search) {
+        return null;
+    }
+
+
 }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>HOME</title>
@@ -47,7 +47,15 @@
     <h2 th:text="${address}"></h2>
 </main>
 
-</nav>
+<th:block th:fragment="footer">
+    <footer class="text-center text-white fixed-bottom" style="background-color: #21081a">
+        <div class="text-center p-3">
+            @2024 copyright
+        </div>
+    </footer>
+</th:block>
+
+
 </body>
 
 </html>

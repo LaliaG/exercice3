@@ -2,6 +2,7 @@ package org.example.exercice3.controller;
 
 import org.example.exercice3.model.Student;
 import org.example.exercice3.service.StudentService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,6 +18,7 @@ public class StudentController {
     private String name;
     private String address;
 
+    @Autowired
     public StudentController(StudentService studentService) {
         this.studentService = studentService;
     }
@@ -28,20 +30,6 @@ public class StudentController {
         return "home";
     }
 
-   /* @GetMapping("/add")
-    public String addStudent(Model model) {
-        model.addAttribute("student", new Student());
-        return "form/form";
-    }
-
-    @PostMapping("/add")
-    public String submit(@ModelAttribute("student") Student student) {
-        System.out.println(student.getLastname());
-        System.out.println(student.getFirstname());
-        System.out.println(student.getAge());
-        System.out.println(student.getEmail());
-        return "redirect:/";
-    }*/
 
     @GetMapping("/add")
     public String addStudent(@RequestParam(value = "id", required = false) UUID id, Model model){
@@ -53,7 +41,20 @@ public class StudentController {
         return "student/add";
     }
 
-    @PostMapping("/add")
+    @GetMapping("/update")
+    public String formUpdate(@RequestParam("studentId") UUID id, Model model){
+        Student student = studentService.getStudentById(id);
+        model.addAttribute("student", student);
+        return "form";
+    }
+
+    @GetMapping("/formulaire")
+    public String formAddStudent(Model model) {
+        model.addAttribute("student", new Student());
+        return "form";
+    }
+
+   /* @PostMapping("/add")
     public String registerStudent(@Valid @ModelAttribute("student")Student student, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
             return "student/add";
@@ -69,20 +70,25 @@ public class StudentController {
                 }
             }
         }
-    }
+    }*//*
 
     @GetMapping("/update/{id}")
     public String update(@PathVariable("id")UUID id, Model model){
         model.addAttribute("student", studentService.getStudentById(id));
         return "student/add";
-    }
+    }*/
+
 
     @GetMapping("/students")
-    public String showStudents(Model model){
-        List<Student> students = studentService. getStudentByLastnameAndFirstname();
-        model.addAttribute("students", students);
-        return "student/studentList";
+    public String showAllStudents(@RequestParam(name="search", required = false) String search, Model model) {
+        if(search == null) {
+            model.addAttribute("students", studentService.getAllStudents());
+        } else {
+            model.addAttribute("students", studentService.searchStudents(search));
+        }
+        return "list";// return "student/studentList"
     }
+
 
     @GetMapping("/search")
     public String searchStudent(@RequestParam(value = "search", required = false)String name, Model model){
@@ -102,6 +108,12 @@ public class StudentController {
         Student student = studentService.getStudentById(id);
         model.addAttribute("student", student);
         return "student/studentDetails";
+    }
+
+    @GetMapping("/student/delete/{id}")
+    private String deleteStudent(@PathVariable UUID id){
+        studentService.deleteStudent(id);
+        return "redirect:/students";
     }
 
 
